@@ -8,14 +8,14 @@ import java.util.Set;
 
 public abstract class ModelCache<U, T extends Model<U>> {
 
-    private final Set<T> models = new HashSet<>();
+    public final Set<T> models = new HashSet<>();
 
     /**
      * Add a new model to the cache
      *
      * @param model the model to add to the cache
      */
-    public void addCache(T model) {
+    public void addModel(T model) {
         this.models.add(model);
     }
 
