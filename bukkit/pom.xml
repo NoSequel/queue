@@ -67,7 +67,13 @@
         <dependency>
             <groupId>com.github.NoSequel</groupId>
             <artifactId>ConfigAPI</artifactId>
-            <version>dc567e2e3d</version>
+            <version>e974bd262e</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.NoSequel</groupId>
+            <artifactId>CommandAPI</artifactId>
+            <version>0e09440404</version>
         </dependency>
 
         <dependency>

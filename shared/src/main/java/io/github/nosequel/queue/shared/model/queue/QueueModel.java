@@ -5,17 +5,19 @@ import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.PriorityQueue;
 
 @Getter
+@Setter
 @RequiredArgsConstructor
 public class QueueModel implements Model<String> {
 
     private final PriorityQueue<QueuePlayerModel> entries = new PriorityQueue<>();
 
     private final String identifier;
-    private final ServerModel targetServer;
+    private ServerModel targetServer;
 
     /**
      * Check if the model's identifier equals to the provided identifiers

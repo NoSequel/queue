@@ -16,13 +16,16 @@ public class QueueConfigTypeAdapter implements ConfigTypeAdapter<QueueModel> {
 
     @Override
     public QueueModel convert(String source) {
+        System.out.println(source);
+
         final JsonObject object = this.parser.parse(source).getAsJsonObject();
         final Optional<ServerModel> serverModel = this.serverHandler.find(object.get("server_model").getAsString());
 
-        return new QueueModel(
-                object.get("identifier").getAsString(),
-                serverModel.orElseGet(() -> new ServerModel("hors"))
-        );
+        final QueueModel queueModel = new QueueModel(object.get("identifier").getAsString());
+
+        serverModel.ifPresent(queueModel::setTargetServer);
+
+        return queueModel;
     }
 
     @Override

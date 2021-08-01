@@ -14,8 +14,8 @@ public class QueueConfiguration extends Configuration {
 
     @Configurable(path = "queues")
     public static QueueModel[] QUEUE_MODELS = new QueueModel[]{
-            new QueueModel("potato", null),
-            new QueueModel("hors", null),
+            new QueueModel("potato"),
+            new QueueModel("hors"),
     };
 
     @SneakyThrows
@@ -26,8 +26,6 @@ public class QueueConfiguration extends Configuration {
         ));
 
         this.registerAdapter(QueueModel.class, new QueueConfigTypeAdapter());
-
-        System.out.println(QUEUE_MODELS.getClass().getSimpleName());
 
         this.load();
         this.save();
