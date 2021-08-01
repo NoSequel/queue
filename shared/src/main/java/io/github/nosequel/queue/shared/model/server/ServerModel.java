@@ -20,6 +20,8 @@ public class ServerModel implements Model<String> {
     private int onlinePlayers;
     private int maxPlayers;
 
+    private ServerStatus status;
+
     private final Set<ServerMetadata> metadatum = new HashSet<>();
     private final Set<UUID> whitelistedPlayers = new HashSet<>();
 
