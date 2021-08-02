@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.github.NoSequel</groupId>
             <artifactId>CommandAPI</artifactId>
-            <version>0e09440404</version>
+            <version>ed6156c131</version>
         </dependency>
 
         <dependency>

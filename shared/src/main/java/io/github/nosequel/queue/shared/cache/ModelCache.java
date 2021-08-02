@@ -1,11 +1,13 @@
 package io.github.nosequel.queue.shared.cache;
 
 import io.github.nosequel.queue.shared.model.Model;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Getter
 public abstract class ModelCache<U, T extends Model<U>> {
 
     public final Set<T> models = new HashSet<>();

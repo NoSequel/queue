@@ -8,6 +8,7 @@ import io.github.nosequel.queue.bukkit.util.ColorUtil;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
+import io.github.nosequel.queue.shared.model.server.ServerModel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
@@ -31,14 +32,40 @@ public class QueueMetaCommand {
 
     @Subcommand(label = "create", parentLabel = "queuemeta", permission = "queue.bukkit.meta.create", userOnly = false)
     public void create(BukkitCommandExecutor executor, String name) {
-        if(queueHandler.find(name).isPresent()) {
+        if (queueHandler.find(name).isPresent()) {
             executor.sendMessage(ChatColor.RED + "A queue with that name already exists, please try again.");
             return;
         }
 
         final QueueModel model = new QueueModel(name);
 
+        executor.sendMessage(ColorUtil.translate(LangConfiguration.QUEUE_CREATE_RESULT
+                .replace("%queue_name%", model.getIdentifier())
+        ));
+
         queueHandler.addModel(model);
+    }
+
+    @Subcommand(label = "list", parentLabel = "queuemeta", permission = "queue.bukkit.meta.list", userOnly = false)
+    public void list(BukkitCommandExecutor executor) {
+        executor.sendMessage(ColorUtil.translate(LangConfiguration.QUEUE_LIST_MESSAGE_HEADER));
+
+        for (QueueModel model : queueHandler.getModels()) {
+            executor.sendMessage(ColorUtil.translate(LangConfiguration.QUEUE_LIST_MESSAGE_ENTRY
+                    .replace("%queue_name%", model.getIdentifier())
+                    .replace("%target_server%", model.getTargetServer() == null ? "None" : model.getTargetServer().getServerName())
+            ));
+        }
+    }
+
+    @Subcommand(label = "setserver", parentLabel = "queuemeta", permission = "queue.bukkit.meta.set.server", userOnly = false)
+    public void setServer(BukkitCommandExecutor executor, QueueModel queueModel, ServerModel serverModel) {
+        queueModel.setTargetServer(serverModel);
+
+        executor.sendMessage(LangConfiguration.QUEUE_UPDATE_SERVER
+                .replace("%target_server%", serverModel.getServerName())
+                .replace("%queue_name%", queueModel.getIdentifier())
+        );
     }
 
     @Getter

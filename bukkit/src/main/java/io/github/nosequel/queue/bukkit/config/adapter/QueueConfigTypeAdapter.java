@@ -5,9 +5,6 @@ import io.github.nosequel.config.adapter.ConfigTypeAdapter;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.server.ServerHandler;
-import io.github.nosequel.queue.shared.model.server.ServerModel;
-
-import java.util.Optional;
 
 public class QueueConfigTypeAdapter implements ConfigTypeAdapter<QueueModel> {
 
@@ -16,14 +13,13 @@ public class QueueConfigTypeAdapter implements ConfigTypeAdapter<QueueModel> {
 
     @Override
     public QueueModel convert(String source) {
-        System.out.println(source);
-
         final JsonObject object = this.parser.parse(source).getAsJsonObject();
-        final Optional<ServerModel> serverModel = this.serverHandler.find(object.get("server_model").getAsString());
-
         final QueueModel queueModel = new QueueModel(object.get("identifier").getAsString());
 
-        serverModel.ifPresent(queueModel::setTargetServer);
+        if(object.has("server_target") && !object.get("server_target").getAsString().equalsIgnoreCase("N/A")) {
+            this.serverHandler.find(object.get("server_target").getAsString())
+                    .ifPresent(queueModel::setTargetServer);
+        }
 
         return queueModel;
     }
@@ -35,9 +31,9 @@ public class QueueConfigTypeAdapter implements ConfigTypeAdapter<QueueModel> {
         object.addProperty("identifier", queueModel.getIdentifier());
 
         if(queueModel.getTargetServer() != null) {
-            object.addProperty("server_model", queueModel.getTargetServer().getServerName());
+            object.addProperty("server_target", queueModel.getTargetServer().getServerName());
         } else {
-            object.addProperty("server_model", "hors");
+            object.addProperty("server_target", "N/A");
         }
 
         return object.toString();
