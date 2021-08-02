@@ -13,6 +13,16 @@ public abstract class ModelCache<U, T extends Model<U>> {
     public final Set<T> models = new HashSet<>();
 
     /**
+     * Check if the model cache has a model cached.
+     *
+     * @param model the model to check if it's cached
+     * @return whether the provided model is already cached or not
+     */
+    public boolean hasModel(T model) {
+        return this.models.contains(model);
+    }
+
+    /**
      * Add a new model to the cache
      *
      * @param model the model to add to the cache
