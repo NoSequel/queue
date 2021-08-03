@@ -15,9 +15,9 @@ public class QueueUpdateData extends UpdateData<QueueModel> {
     private final ServerHandler serverHandler = QueueBootstrap.getBootstrap().getPlatform().getServerHandler();
 
     private final String modelId;
-    private final String serverId;
-
     private final PriorityQueue<QueuePlayerModel> entries;
+
+    private String serverId;
 
     /**
      * Constructor to make a new {@link QueueUpdateData} object.
@@ -32,9 +32,11 @@ public class QueueUpdateData extends UpdateData<QueueModel> {
         super();
 
         this.modelId = queueModel.getIdentifier();
-        this.serverId = queueModel.getTargetServer().getServerName();
-
         this.entries = new PriorityQueue<>(queueModel.getEntries());
+
+        if(queueModel.getTargetServer() != null) {
+            this.serverId = queueModel.getTargetServer().getServerName();
+        }
     }
 
     /**
@@ -46,7 +48,13 @@ public class QueueUpdateData extends UpdateData<QueueModel> {
      */
     @Override
     public boolean isEqualTo(QueueModel data) {
-        return this.serverId.equals(data.getTargetServer().getServerName())
+        final boolean serversEqual = this.serverId == null
+                ? data.getTargetServer() == null
+                : data.getTargetServer() == null
+                ? this.serverId == null
+                : data.getTargetServer().getServerName().equals(serverId);
+
+        return serversEqual
                 && this.entries.containsAll(data.getEntries()) && data.getEntries().containsAll(entries);
     }
 

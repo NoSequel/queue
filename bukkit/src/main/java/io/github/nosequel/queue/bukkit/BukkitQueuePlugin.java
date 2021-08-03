@@ -11,6 +11,7 @@ import io.github.nosequel.queue.bukkit.config.ServerConfiguration;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
+import io.github.nosequel.queue.shared.update.SyncHandler;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,7 +19,7 @@ import java.io.File;
 
 public class BukkitQueuePlugin extends JavaPlugin {
 
-    private final QueueBootstrap bootstrap = new QueueBootstrap(new BukkitQueuePlatform());
+    private final QueueBootstrap bootstrap = new QueueBootstrap(new BukkitQueuePlatform(new SyncHandler()));
     private QueueConfiguration queueModelConfig;
 
     @Override

@@ -1,6 +1,7 @@
 package io.github.nosequel.queue.shared.cache;
 
 import io.github.nosequel.queue.shared.model.Model;
+import io.github.nosequel.queue.shared.update.SyncHandler;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -29,6 +30,7 @@ public abstract class ModelCache<U, T extends Model<U>> {
      */
     public void addModel(T model) {
         this.models.add(model);
+        System.out.println(SyncHandler.GSON.toJson(model));
     }
 
     /**

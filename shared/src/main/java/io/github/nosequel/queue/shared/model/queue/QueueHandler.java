@@ -2,12 +2,18 @@ package io.github.nosequel.queue.shared.model.queue;
 
 import io.github.nosequel.queue.shared.cache.ModelCache;
 import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
+import io.github.nosequel.queue.shared.update.SyncHandler;
+import io.github.nosequel.queue.shared.update.queue.QueueUpdateTask;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class QueueHandler extends ModelCache<String, QueueModel> {
+
+    public QueueHandler() {
+        new QueueUpdateTask(this, SyncHandler.getInstance()).start();
+    }
 
     /**
      * Get the current queue position of a {@link QueuePlayerModel}

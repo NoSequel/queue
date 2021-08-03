@@ -12,6 +12,9 @@ import java.util.List;
 @Setter
 public class SyncHandler {
 
+    @Getter
+    private static SyncHandler instance; // the main instance for the SyncHandler object
+
     public final static Gson GSON = new GsonBuilder()
             .setLongSerializationPolicy(LongSerializationPolicy.STRING)
             .setPrettyPrinting().create();
@@ -20,6 +23,10 @@ public class SyncHandler {
 
     private final List<DataSyncHandler<?>> syncHandlers = new ArrayList<>();
     private io.github.nosequel.queue.shared.update.sync.SyncHandler syncHandler;
+
+    public SyncHandler() {
+        instance = this;
+    }
 
     /**
      * Push an {@link Object} as data to the {@link io.github.nosequel.queue.shared.update.sync.SyncHandler}.

@@ -1,13 +1,14 @@
 package io.github.nosequel.queue.shared.update.queue;
 
-import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.update.sync.DataSyncHandler;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class QueueDataSyncHandler extends DataSyncHandler<QueueUpdateData> {
 
-    private final QueueHandler queueHandler = QueueBootstrap.getBootstrap().getPlatform().getQueueHandler();
+    private final QueueHandler queueHandler;
 
     /**
      * Handle an incoming {@link QueueUpdateData} object
