@@ -1,6 +1,10 @@
 package io.github.nosequel.queue.shared;
 
+import io.github.nosequel.command.CommandHandler;
 import io.github.nosequel.config.ConfigurationFile;
+import io.github.nosequel.queue.shared.command.QueueMetaCommand;
+import io.github.nosequel.queue.shared.command.adapters.QueueModelTypeAdapter;
+import io.github.nosequel.queue.shared.command.adapters.ServerModelTypeAdapter;
 import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.shared.config.QueueConfiguration;
 import io.github.nosequel.queue.shared.config.ServerConfiguration;
@@ -41,7 +45,7 @@ public abstract class QueuePlatform {
      * @param playerProvider the provider provided in the {@link PlayerHandler#PlayerHandler(SyncHandler, PlayerProvider)} constructor
      * @param parentFolder   the parent folder to create the files in
      */
-    public QueuePlatform(ServerProvider serverProvider, PlayerProvider playerProvider, File parentFolder) {
+    public QueuePlatform(ServerProvider serverProvider, PlayerProvider playerProvider, File parentFolder, CommandHandler commandHandler) {
         this.syncHandler = new SyncHandler();
 
         this.playerHandler = new PlayerHandler(this.syncHandler, playerProvider);
@@ -70,6 +74,12 @@ public abstract class QueuePlatform {
 
         // load the queue data after the queue configuration & server data
         this.loadQueueData();
+
+        // register commands
+        commandHandler.registerTypeAdapter(ServerModel.class, new ServerModelTypeAdapter(this.serverHandler));
+        commandHandler.registerTypeAdapter(QueueModel.class, new QueueModelTypeAdapter(this.queueHandler));
+
+        commandHandler.registerCommand(new QueueMetaCommand(this.queueHandler));
     }
 
     /**

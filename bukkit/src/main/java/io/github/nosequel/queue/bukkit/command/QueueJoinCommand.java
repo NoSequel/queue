@@ -3,7 +3,6 @@ package io.github.nosequel.queue.bukkit.command;
 import io.github.nosequel.command.annotation.Command;
 import io.github.nosequel.command.bukkit.executor.BukkitCommandExecutor;
 import io.github.nosequel.queue.shared.config.LangConfiguration;
-import io.github.nosequel.queue.bukkit.util.ColorUtil;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.player.PlayerHandler;
 import io.github.nosequel.queue.shared.model.player.PlayerModel;
@@ -19,7 +18,7 @@ public class QueueJoinCommand {
                 .find(executor.getPlayer().getUniqueId())
                 .orElse(null);
 
-        executor.sendMessage(ColorUtil.translate(LangConfiguration.QUEUE_JOIN.replace("%queue_name%", target.getIdentifier())));
+        executor.sendMessage(LangConfiguration.QUEUE_JOIN.replace("%queue_name%", target.getIdentifier()));
         target.addEntry(model);
     }
 }

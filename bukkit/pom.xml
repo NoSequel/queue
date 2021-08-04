@@ -71,8 +71,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.NoSequel</groupId>
-            <artifactId>CommandAPI</artifactId>
+            <groupId>com.github.NoSequel.CommandAPI</groupId>
+            <artifactId>bukkit</artifactId>
             <version>ed6156c131</version>
         </dependency>
 

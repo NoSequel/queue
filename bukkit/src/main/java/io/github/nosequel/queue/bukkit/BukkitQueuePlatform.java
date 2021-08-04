@@ -1,5 +1,6 @@
 package io.github.nosequel.queue.bukkit;
 
+import io.github.nosequel.command.bukkit.BukkitCommandHandler;
 import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.config.bukkit.BukkitConfigurationFile;
 import io.github.nosequel.queue.bukkit.providers.BukkitPlayerProvider;
@@ -13,11 +14,12 @@ import java.io.File;
 
 public class BukkitQueuePlatform extends QueuePlatform {
 
-    public BukkitQueuePlatform(File parentFile) {
+    public BukkitQueuePlatform(File parentFile, BukkitCommandHandler commandHandler) {
         super(
                 new BukkitServerProvider(),
                 new BukkitPlayerProvider(),
-                parentFile
+                parentFile,
+                commandHandler
         );
 
         this.getSyncHandler().setSyncHandler(new RedisDataSyncHandler(this.getSyncHandler(), new RedisAuthorizationData(

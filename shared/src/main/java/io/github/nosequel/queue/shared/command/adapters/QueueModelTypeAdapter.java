@@ -1,14 +1,16 @@
-package io.github.nosequel.queue.bukkit.command.adapters;
+package io.github.nosequel.queue.shared.command.adapters;
 
 import io.github.nosequel.command.adapter.TypeAdapter;
 import io.github.nosequel.command.executor.CommandExecutor;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class QueueModelTypeAdapter implements TypeAdapter<QueueModel> {
 
-    private final QueueHandler queueHandler = QueueBootstrap.getBootstrap().getPlatform().getQueueHandler();
+    private final QueueHandler queueHandler;
 
     @Override
     public QueueModel convert(CommandExecutor commandExecutor, String s) throws Exception {
