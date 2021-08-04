@@ -25,6 +25,8 @@ public class ServerHandler extends ModelCache<String, ServerModel> {
         this.syncHandler = syncHandler;
         this.provider = provider;
 
+        this.addModel(localServer);
+
         new LocalServerUpdateTask(this, syncHandler).start();
     }
 }

@@ -82,8 +82,6 @@ public abstract class QueuePlatform {
     public abstract ConfigurationFile createConfigurationFile(File file);
 
     public void loadServerData() {
-        this.serverHandler.addModel(ServerConfiguration.LOCAL_SERVER);
-
         for (ServerModel serverModel : ServerConfiguration.SERVER_MODELS) {
             this.serverHandler.addModel(serverModel);
         }
