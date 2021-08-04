@@ -15,7 +15,7 @@ public class QueuePlayerModel implements Model<UUID> {
     private final String name;
     private final UUID uniqueId;
 
-    private int priority;
+    private int priority = 0;
 
     /**
      * Check if the model's identifier equals to the provided identifiers

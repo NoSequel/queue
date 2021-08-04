@@ -67,7 +67,13 @@
         <dependency>
             <groupId>com.github.NoSequel</groupId>
             <artifactId>ConfigAPI</artifactId>
-            <version>e974bd262e</version>
+            <version>394941def3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.NoSequel</groupId>
+            <artifactId>ScoreboardAPI</artifactId>
+            <version>d86c2c6d87</version>
         </dependency>
 
         <dependency>

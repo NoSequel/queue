@@ -33,11 +33,6 @@ public class QueueConfiguration extends Configuration {
 
         this.registerAdapter(QueueModel.class, new QueueConfigTypeAdapter());
         this.load();
-
-        // register all queue models to the QueueHandler
-        for (QueueModel queueModel : QUEUE_MODELS) {
-            this.queueHandler.addModel(queueModel);
-        }
     }
 
     @SneakyThrows

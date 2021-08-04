@@ -1,6 +1,7 @@
 package io.github.nosequel.queue.shared.model.server;
 
 import io.github.nosequel.queue.shared.model.Model;
+import io.github.nosequel.queue.shared.update.server.ServerUpdateData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -21,9 +22,26 @@ public class ServerModel implements Model<String> {
     private int maxPlayers;
 
     private ServerStatus status;
+    private ServerUpdateData previousUpdateData;
 
     private final Set<ServerMetadata> metadatum = new HashSet<>();
     private final Set<UUID> whitelistedPlayers = new HashSet<>();
+
+    /**
+     * Update the current {@link ServerModel} to the
+     * current data from the provided {@link ServerProvider}.
+     *
+     * @param provider the provider to update the data from
+     */
+    public void updateToLocal(ServerProvider provider) {
+        this.onlinePlayers = provider.getLocalOnlinePlayers();
+        this.maxPlayers = provider.getLocalMaxPlayers();
+        this.status = provider.getLocalStatus();
+
+        // update the whitelisted players
+        this.whitelistedPlayers.clear();
+        this.whitelistedPlayers.addAll(provider.getLocalWhitelistedPlayers());
+    }
 
     /**
      * Add an array of {@link ServerMetadata} to the {@link ServerModel#metadatum} field

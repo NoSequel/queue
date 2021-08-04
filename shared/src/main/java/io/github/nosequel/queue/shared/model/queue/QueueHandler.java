@@ -1,43 +1,19 @@
 package io.github.nosequel.queue.shared.model.queue;
 
 import io.github.nosequel.queue.shared.cache.ModelCache;
+import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;
 import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
+import io.github.nosequel.queue.shared.model.queue.update.QueueMoveTask;
 import io.github.nosequel.queue.shared.update.SyncHandler;
-import io.github.nosequel.queue.shared.update.queue.QueueUpdateTask;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class QueueHandler extends ModelCache<String, QueueModel> {
 
-    public QueueHandler() {
-        new QueueUpdateTask(this, SyncHandler.getInstance()).start();
-    }
-
-    /**
-     * Get the current queue position of a {@link QueuePlayerModel}
-     * within a {@link QueueModel}.
-     *
-     * @param playerModel the player to find within the queue
-     * @param queueModel  the queue to find the player in
-     * @return the position of the player in the queue, if for some reason
-     *         unable to find within the queue it will return -1.
-     */
-    public Integer getPosition(QueuePlayerModel playerModel, QueueModel queueModel) {
-        if(!queueModel.getEntries().contains(playerModel)) {
-            throw new IllegalArgumentException("playerModel with unique identifier " + playerModel.getUniqueId().toString() + " is not in the " + queueModel.getIdentifier() + " queue.");
-        }
-
-        for(int i = 0; i < queueModel.getEntries().size(); i++) {
-            final QueuePlayerModel current = queueModel.getEntries().poll();
-
-            if(current != null && current.equals(playerModel)) {
-                return i + 1;
-            }
-        }
-
-        return -1;
+    public QueueHandler(QueuePlayerHandler playerHandler) {
+        new QueueMoveTask(this, SyncHandler.getInstance(), playerHandler.getPlayerProvider()).start();
     }
 
     /**
@@ -49,8 +25,14 @@ public class QueueHandler extends ModelCache<String, QueueModel> {
      * @return the queue models found
      */
     public Collection<QueueModel> getQueue(QueuePlayerModel playerModel) {
-        return this.models.stream()
-                .filter(model -> model.getEntries().contains(playerModel))
-                .collect(Collectors.toCollection(HashSet::new));
+        final Set<QueueModel> queues = new HashSet<>();
+
+        for (QueueModel model : this.models) {
+            if (model.getEntries().contains(playerModel)) {
+                queues.add(model);
+            }
+        }
+
+        return queues;
     }
 }

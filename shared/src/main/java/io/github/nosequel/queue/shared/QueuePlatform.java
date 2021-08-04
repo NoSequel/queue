@@ -2,9 +2,11 @@ package io.github.nosequel.queue.shared;
 
 import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
+import io.github.nosequel.queue.shared.model.queue.update.QueueUpdateSyncHandler;
 import io.github.nosequel.queue.shared.model.server.ServerHandler;
 import io.github.nosequel.queue.shared.update.SyncHandler;
-import io.github.nosequel.queue.shared.update.queue.QueueDataSyncHandler;
+import io.github.nosequel.queue.shared.update.player.QueuePlayerDataSyncHandler;
+import io.github.nosequel.queue.shared.update.server.ServerDataSyncHandler;
 import lombok.Getter;
 
 @Getter
@@ -29,6 +31,8 @@ public abstract class QueuePlatform {
         this.serverHandler = serverHandler;
         this.syncHandler = syncHandler;
 
-        syncHandler.getSyncHandlers().add(new QueueDataSyncHandler(this.queueHandler));
+        syncHandler.getSyncHandlers().add(new QueueUpdateSyncHandler(this.queueHandler, this.queuePlayerHandler));
+        syncHandler.getSyncHandlers().add(new QueuePlayerDataSyncHandler(this.queuePlayerHandler));
+        syncHandler.getSyncHandlers().add(new ServerDataSyncHandler(this.serverHandler));
     }
 }

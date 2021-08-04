@@ -10,11 +10,11 @@ import io.github.nosequel.queue.shared.update.sync.redis.RedisDataSyncHandler;
 
 public class BukkitQueuePlatform extends QueuePlatform {
 
-    public BukkitQueuePlatform(SyncHandler syncHandler) {
+    public BukkitQueuePlatform(SyncHandler syncHandler, QueuePlayerHandler playerHandler, ServerHandler serverHandler) {
         super(
-                new QueueHandler(),
-                new QueuePlayerHandler(),
-                new ServerHandler(),
+                new QueueHandler(playerHandler),
+                playerHandler,
+                serverHandler,
                 syncHandler
         );
 
