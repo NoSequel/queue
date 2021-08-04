@@ -12,14 +12,12 @@ import io.github.nosequel.queue.bukkit.config.ServerConfiguration;
 import io.github.nosequel.queue.bukkit.listener.PlayerListener;
 import io.github.nosequel.queue.bukkit.providers.BukkitQueuePlayerProvider;
 import io.github.nosequel.queue.bukkit.providers.BukkitServerProvider;
-import io.github.nosequel.queue.bukkit.scoreboard.TemporaryScoreboardProvider;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.server.ServerHandler;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
 import io.github.nosequel.queue.shared.update.SyncHandler;
-import io.github.nosequel.scoreboard.ScoreboardHandler;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,6 +31,9 @@ public class BukkitQueuePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // register bungeecord
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
         new ServerConfiguration(new File(this.getDataFolder(), "servers.yml"));
         new LangConfiguration(new File(this.getDataFolder(), "lang.yml"));
 
@@ -49,8 +50,10 @@ public class BukkitQueuePlugin extends JavaPlugin {
                 playerHandler,
                 serverHandler
         ));
+        this.loadServerData();
 
         this.queueModelConfig = new QueueConfiguration(new File(this.getDataFolder(), "queues.yml"));
+        this.loadQueueData();
 
         final CommandHandler commandHandler = new BukkitCommandHandler("bukkit-queue");
 
@@ -63,20 +66,17 @@ public class BukkitQueuePlugin extends JavaPlugin {
 
         commandHandler.registerCommand(new QueueMetaCommand());
         commandHandler.registerCommand(new QueueJoinCommand());
-
-        this.loadConfigData();
-
-        // scoreboard lol
-        new ScoreboardHandler(this, new TemporaryScoreboardProvider(), 20L);
     }
 
-    private void loadConfigData() {
+    private void loadServerData() {
         this.bootstrap.getPlatform().getServerHandler().addModel(ServerConfiguration.LOCAL_SERVER);
 
         for (ServerModel serverModel : ServerConfiguration.SERVER_MODELS) {
             this.bootstrap.getPlatform().getServerHandler().addModel(serverModel);
         }
+    }
 
+    private void loadQueueData() {
         for (QueueModel queueModel : QueueConfiguration.QUEUE_MODELS) {
             this.bootstrap.getPlatform().getQueueHandler().addModel(queueModel);
         }
