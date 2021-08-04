@@ -5,6 +5,7 @@ import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.queue.shared.command.QueueMetaCommand;
 import io.github.nosequel.queue.shared.command.adapters.QueueModelTypeAdapter;
 import io.github.nosequel.queue.shared.command.adapters.ServerModelTypeAdapter;
+import io.github.nosequel.queue.shared.config.DatabaseConfiguration;
 import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.shared.config.QueueConfiguration;
 import io.github.nosequel.queue.shared.config.ServerConfiguration;
@@ -19,6 +20,7 @@ import io.github.nosequel.queue.shared.model.server.ServerProvider;
 import io.github.nosequel.queue.shared.update.SyncHandler;
 import io.github.nosequel.queue.shared.update.player.QueuePlayerDataSyncHandler;
 import io.github.nosequel.queue.shared.update.server.ServerDataSyncHandler;
+import io.github.nosequel.queue.shared.update.sync.redis.RedisDataSyncHandler;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,7 +38,7 @@ public abstract class QueuePlatform {
     private final QueueConfiguration queueModelConfig;
     private final ServerConfiguration serverConfiguration;
     private final LangConfiguration langConfiguration;
-
+    private final DatabaseConfiguration databaseConfiguration;
 
     /**
      * Constructor to make a new {@link QueuePlatform} object.
@@ -55,9 +57,16 @@ public abstract class QueuePlatform {
         // the server handler requires a field from the server configuration
         this.serverConfiguration = new ServerConfiguration(this.createConfigurationFile(new File(parentFolder, "servers.yml")));
 
+        // register database configuration for server handler synchronization
+        this.databaseConfiguration = new DatabaseConfiguration(this.createConfigurationFile(new File(parentFolder, "database.yml")));
+
         // register the previously mentioned server handler,
         // using the ServerConfiguration.LOCAL_SERVER field.
         this.serverHandler = new ServerHandler(ServerConfiguration.LOCAL_SERVER, this.syncHandler, serverProvider);
+        this.syncHandler.setSyncHandler(new RedisDataSyncHandler(
+                this.syncHandler,
+                DatabaseConfiguration.AUTHORIZATION_DATA
+        ));
 
         // register all synchronization handlers
         syncHandler.getSyncHandlers().add(new QueueUpdateSyncHandler(this.queueHandler, this.playerHandler));

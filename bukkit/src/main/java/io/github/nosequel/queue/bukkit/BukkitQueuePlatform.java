@@ -1,19 +1,26 @@
 package io.github.nosequel.queue.bukkit;
 
+import io.github.nosequel.command.CommandHandler;
 import io.github.nosequel.command.bukkit.BukkitCommandHandler;
 import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.config.bukkit.BukkitConfigurationFile;
 import io.github.nosequel.queue.bukkit.providers.BukkitPlayerProvider;
 import io.github.nosequel.queue.bukkit.providers.BukkitServerProvider;
 import io.github.nosequel.queue.shared.QueuePlatform;
-import io.github.nosequel.queue.shared.update.sync.redis.RedisAuthorizationData;
-import io.github.nosequel.queue.shared.update.sync.redis.RedisDataSyncHandler;
+import io.github.nosequel.queue.shared.model.player.PlayerProvider;
+import io.github.nosequel.queue.shared.model.server.ServerProvider;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
 public class BukkitQueuePlatform extends QueuePlatform {
 
+    /**
+     * Constructor to make a new {@link BukkitQueuePlatform} object.
+     *
+     * @param parentFile     the parent file to provide in the {@link QueuePlatform#QueuePlatform(ServerProvider, PlayerProvider, File, CommandHandler)} constructor.
+     * @param commandHandler the command handler to provide in the {@link QueuePlatform#QueuePlatform(ServerProvider, PlayerProvider, File, CommandHandler)} constructor.
+     */
     public BukkitQueuePlatform(File parentFile, BukkitCommandHandler commandHandler) {
         super(
                 new BukkitServerProvider(),
@@ -21,12 +28,6 @@ public class BukkitQueuePlatform extends QueuePlatform {
                 parentFile,
                 commandHandler
         );
-
-        this.getSyncHandler().setSyncHandler(new RedisDataSyncHandler(this.getSyncHandler(), new RedisAuthorizationData(
-                "panel.clox.us",
-                6379,
-                "")
-        ));
     }
 
     /**
