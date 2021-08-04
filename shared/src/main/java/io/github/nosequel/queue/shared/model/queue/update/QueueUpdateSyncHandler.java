@@ -1,7 +1,7 @@
 package io.github.nosequel.queue.shared.model.queue.update;
 
-import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
+import io.github.nosequel.queue.shared.model.player.PlayerHandler;
+import io.github.nosequel.queue.shared.model.player.PlayerModel;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.update.sync.DataSyncHandler;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class QueueUpdateSyncHandler extends DataSyncHandler<GenericQueueData> {
 
     private final QueueHandler queueHandler;
-    private final QueuePlayerHandler playerHandler;
+    private final PlayerHandler playerHandler;
 
     /**
      * Handle an incoming {@link GenericQueueData} object
@@ -19,7 +19,7 @@ public class QueueUpdateSyncHandler extends DataSyncHandler<GenericQueueData> {
      */
     @Override
     public void handleData(GenericQueueData object) {
-        final QueuePlayerModel playerModel = this.playerHandler
+        final PlayerModel playerModel = this.playerHandler
                 .find(object.getPlayerModel().getUniqueId())
                 .orElse(object.getPlayerModel());
 

@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class QueuePlayerModel implements Model<UUID> {
+public class PlayerModel implements Model<UUID> {
 
     private final String name;
     private final UUID uniqueId;

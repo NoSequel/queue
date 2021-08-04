@@ -2,22 +2,22 @@ package io.github.nosequel.queue.shared.model.player;
 
 import io.github.nosequel.queue.shared.model.server.ServerModel;
 
-public interface QueuePlayerProvider {
+public interface PlayerProvider {
 
     /**
-     * Send a message to a {@link QueuePlayerModel}
+     * Send a message to a {@link PlayerModel}
      *
      * @param model   the model to send the message to
      * @param message the message to send to the model
      */
-    void sendMessage(QueuePlayerModel model, String message);
+    void sendMessage(PlayerModel model, String message);
 
     /**
-     * Send a {@link QueuePlayerModel} to a target {@link ServerModel}
+     * Send a {@link PlayerModel} to a target {@link ServerModel}
      *
      * @param model       the model of the player
      * @param serverModel the model to send the player to
      */
-    void sendToServer(QueuePlayerModel model, ServerModel serverModel);
+    void sendToServer(PlayerModel model, ServerModel serverModel);
 
 }

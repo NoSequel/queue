@@ -1,7 +1,7 @@
 package io.github.nosequel.queue.shared.model.queue;
 
 import io.github.nosequel.queue.shared.model.Model;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
+import io.github.nosequel.queue.shared.model.player.PlayerModel;
 import io.github.nosequel.queue.shared.model.queue.update.GenericQueueData;
 import io.github.nosequel.queue.shared.model.queue.update.QueueUpdateType;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
@@ -17,27 +17,27 @@ import java.util.*;
 @RequiredArgsConstructor
 public class QueueModel implements Model<String> {
 
-    private final PriorityQueue<QueuePlayerModel> entries = new PriorityQueue<>(Comparator.comparingInt(playerModel -> -playerModel.getPriority()));
+    private final PriorityQueue<PlayerModel> entries = new PriorityQueue<>(Comparator.comparingInt(playerModel -> -playerModel.getPriority()));
     private final Set<QueueModelMetadata> metadatum = new HashSet<>();
 
     private final String identifier;
     private ServerModel targetServer;
 
     /**
-     * Get the current queue position of a {@link QueuePlayerModel}
+     * Get the current queue position of a {@link PlayerModel}
      * within a {@link QueueModel}.
      *
      * @param playerModel the player to find within the queue
      * @return the position of the player in the queue, if for some reason
      * unable to find within the queue it will return -1.
      */
-    public Integer getPosition(QueuePlayerModel playerModel) {
+    public Integer getPosition(PlayerModel playerModel) {
         if (!this.entries.contains(playerModel)) {
             throw new IllegalArgumentException("playerModel with unique identifier " + playerModel.getUniqueId().toString() + " is not in the " + this.identifier + " queue.");
         }
 
         for (int i = 0; i < this.entries.size(); i++) {
-            final QueuePlayerModel current = this.entries.peek();
+            final PlayerModel current = this.entries.peek();
 
             if (current != null && current.equals(playerModel)) {
                 return i + 1;
@@ -52,7 +52,7 @@ public class QueueModel implements Model<String> {
      *
      * @param playerModel the model to add to the queue
      */
-    public void addEntry(QueuePlayerModel playerModel) {
+    public void addEntry(PlayerModel playerModel) {
         this.entries.add(playerModel);
 
         SyncHandler.getInstance().pushData(new GenericQueueData(

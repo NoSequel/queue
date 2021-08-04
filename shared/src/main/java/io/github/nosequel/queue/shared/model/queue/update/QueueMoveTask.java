@@ -1,8 +1,8 @@
 package io.github.nosequel.queue.shared.model.queue.update;
 
 import io.github.nosequel.queue.shared.config.LangConfiguration;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerProvider;
+import io.github.nosequel.queue.shared.model.player.PlayerModel;
+import io.github.nosequel.queue.shared.model.player.PlayerProvider;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.queue.QueueModelMetadata;
@@ -18,7 +18,7 @@ public class QueueMoveTask extends Thread {
 
     private final QueueHandler queueHandler;
     private final SyncHandler syncHandler;
-    private final QueuePlayerProvider playerProvider;
+    private final PlayerProvider playerProvider;
 
     /**
      * If this thread was constructed using a separate
@@ -40,7 +40,7 @@ public class QueueMoveTask extends Thread {
                     final ServerModel serverModel = model.getTargetServer();
 
                     if (serverModel != null && serverModel.getMaxPlayers() > serverModel.getOnlinePlayers()) {
-                        final QueuePlayerModel current = model.getEntries().poll();
+                        final PlayerModel current = model.getEntries().poll();
 
                         if (current != null && (serverModel.getWhitelistedPlayers().contains(current.getUniqueId()) || !serverModel.hasMetadata(ServerMetadata.WHITELISTED))) {
                             this.syncHandler.pushData(new GenericQueueData(

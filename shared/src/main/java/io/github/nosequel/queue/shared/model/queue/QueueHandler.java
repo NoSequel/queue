@@ -1,8 +1,8 @@
 package io.github.nosequel.queue.shared.model.queue;
 
 import io.github.nosequel.queue.shared.cache.ModelCache;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
+import io.github.nosequel.queue.shared.model.player.PlayerHandler;
+import io.github.nosequel.queue.shared.model.player.PlayerModel;
 import io.github.nosequel.queue.shared.model.queue.update.QueueMoveTask;
 import io.github.nosequel.queue.shared.update.SyncHandler;
 
@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class QueueHandler extends ModelCache<String, QueueModel> {
 
-    public QueueHandler(QueuePlayerHandler playerHandler) {
+    public QueueHandler(PlayerHandler playerHandler) {
         new QueueMoveTask(this, SyncHandler.getInstance(), playerHandler.getPlayerProvider()).start();
     }
 
@@ -24,7 +24,7 @@ public class QueueHandler extends ModelCache<String, QueueModel> {
      * @param playerModel the model of the player
      * @return the queue models found
      */
-    public Collection<QueueModel> getQueue(QueuePlayerModel playerModel) {
+    public Collection<QueueModel> getQueue(PlayerModel playerModel) {
         final Set<QueueModel> queues = new HashSet<>();
 
         for (QueueModel model : this.models) {

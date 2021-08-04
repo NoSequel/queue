@@ -12,10 +12,10 @@ import java.util.UUID;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class QueuePlayerHandler extends ModelCache<UUID, QueuePlayerModel> {
+public class PlayerHandler extends ModelCache<UUID, PlayerModel> {
 
     private final SyncHandler syncHandler;
-    private final QueuePlayerProvider playerProvider;
+    private final PlayerProvider playerProvider;
 
     /**
      * Add a new model to the cache
@@ -23,7 +23,7 @@ public class QueuePlayerHandler extends ModelCache<UUID, QueuePlayerModel> {
      * @param model the model to add to the cache
      */
     @Override
-    public void addModel(QueuePlayerModel model) {
+    public void addModel(PlayerModel model) {
         if(!this.find(model.getUniqueId()).isPresent()) {
             this.syncHandler.pushData(new QueuePlayerJoinData(model));
         }

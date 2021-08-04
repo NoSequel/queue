@@ -4,8 +4,8 @@ import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.shared.config.QueueConfiguration;
 import io.github.nosequel.queue.shared.config.ServerConfiguration;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;
-import io.github.nosequel.queue.shared.model.player.QueuePlayerProvider;
+import io.github.nosequel.queue.shared.model.player.PlayerHandler;
+import io.github.nosequel.queue.shared.model.player.PlayerProvider;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.queue.update.QueueUpdateSyncHandler;
@@ -25,7 +25,7 @@ import java.io.File;
 public abstract class QueuePlatform {
 
     private final QueueHandler queueHandler;
-    private final QueuePlayerHandler queuePlayerHandler;
+    private final PlayerHandler playerHandler;
     private final ServerHandler serverHandler;
     private final SyncHandler syncHandler;
 
@@ -33,14 +33,19 @@ public abstract class QueuePlatform {
     private final ServerConfiguration serverConfiguration;
     private final LangConfiguration langConfiguration;
 
+
     /**
      * Constructor to make a new {@link QueuePlatform} object.
+     *
+     * @param serverProvider the provider provided in the {@link ServerHandler#ServerHandler(ServerModel, SyncHandler, ServerProvider)} constructor
+     * @param playerProvider the provider provided in the {@link PlayerHandler#PlayerHandler(SyncHandler, PlayerProvider)} constructor
+     * @param parentFolder   the parent folder to create the files in
      */
-    public QueuePlatform(ServerProvider serverProvider, QueuePlayerProvider playerProvider, File parentFolder) {
+    public QueuePlatform(ServerProvider serverProvider, PlayerProvider playerProvider, File parentFolder) {
         this.syncHandler = new SyncHandler();
 
-        this.queuePlayerHandler = new QueuePlayerHandler(this.syncHandler, playerProvider);
-        this.queueHandler = new QueueHandler(this.queuePlayerHandler);
+        this.playerHandler = new PlayerHandler(this.syncHandler, playerProvider);
+        this.queueHandler = new QueueHandler(this.playerHandler);
 
         // register server configuration before server handler,
         // the server handler requires a field from the server configuration
@@ -51,8 +56,8 @@ public abstract class QueuePlatform {
         this.serverHandler = new ServerHandler(ServerConfiguration.LOCAL_SERVER, this.syncHandler, serverProvider);
 
         // register all synchronization handlers
-        syncHandler.getSyncHandlers().add(new QueueUpdateSyncHandler(this.queueHandler, this.queuePlayerHandler));
-        syncHandler.getSyncHandlers().add(new QueuePlayerDataSyncHandler(this.queuePlayerHandler));
+        syncHandler.getSyncHandlers().add(new QueueUpdateSyncHandler(this.queueHandler, this.playerHandler));
+        syncHandler.getSyncHandlers().add(new QueuePlayerDataSyncHandler(this.playerHandler));
         syncHandler.getSyncHandlers().add(new ServerDataSyncHandler(this.serverHandler));
 
         // register configuration stuff
@@ -92,7 +97,7 @@ public abstract class QueuePlatform {
 
 
     public void unload() {
-        if(this.queueModelConfig != null) {
+        if (this.queueModelConfig != null) {
             this.queueModelConfig.save();
         }
     }
