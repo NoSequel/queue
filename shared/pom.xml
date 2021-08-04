@@ -11,6 +11,13 @@
 
     <artifactId>shared</artifactId>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -27,6 +34,12 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>3.6.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.NoSequel.ConfigAPI</groupId>
+            <artifactId>shared</artifactId>
+            <version>394941def3</version>
         </dependency>
     </dependencies>
 

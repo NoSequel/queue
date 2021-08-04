@@ -2,7 +2,7 @@ package io.github.nosequel.queue.bukkit.command;
 
 import io.github.nosequel.command.annotation.Command;
 import io.github.nosequel.command.bukkit.executor.BukkitCommandExecutor;
-import io.github.nosequel.queue.bukkit.config.LangConfiguration;
+import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.bukkit.util.ColorUtil;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;

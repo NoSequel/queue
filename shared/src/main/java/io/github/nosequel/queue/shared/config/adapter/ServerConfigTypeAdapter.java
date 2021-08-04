@@ -1,4 +1,4 @@
-package io.github.nosequel.queue.bukkit.config.adapter;
+package io.github.nosequel.queue.shared.config.adapter;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

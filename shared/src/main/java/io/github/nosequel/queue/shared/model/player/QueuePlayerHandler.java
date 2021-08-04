@@ -7,10 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -18,7 +15,7 @@ import java.util.stream.Collectors;
 public class QueuePlayerHandler extends ModelCache<UUID, QueuePlayerModel> {
 
     private final SyncHandler syncHandler;
-    private QueuePlayerProvider playerProvider;
+    private final QueuePlayerProvider playerProvider;
 
     /**
      * Add a new model to the cache

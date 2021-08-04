@@ -1,14 +1,12 @@
-package io.github.nosequel.queue.bukkit.config;
+package io.github.nosequel.queue.shared.config;
 
 import io.github.nosequel.config.Configuration;
+import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.config.annotation.Configurable;
-import io.github.nosequel.config.bukkit.BukkitConfigurationFile;
-import io.github.nosequel.queue.bukkit.config.adapter.ServerConfigTypeAdapter;
+
+import io.github.nosequel.queue.shared.config.adapter.ServerConfigTypeAdapter;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
 import lombok.SneakyThrows;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.File;
 
 public class ServerConfiguration  extends Configuration {
 
@@ -21,11 +19,8 @@ public class ServerConfiguration  extends Configuration {
     };
 
     @SneakyThrows
-    public ServerConfiguration(File file) {
-        super(new BukkitConfigurationFile(
-                file,
-                YamlConfiguration.loadConfiguration(file)
-        ));
+    public ServerConfiguration(ConfigurationFile file) {
+        super(file);
 
         this.registerAdapter(ServerModel.class, new ServerConfigTypeAdapter());
 

@@ -1,22 +1,18 @@
-package io.github.nosequel.queue.bukkit.config;
+package io.github.nosequel.queue.shared.config;
 
 import io.github.nosequel.config.Configuration;
+import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.config.annotation.Configurable;
-import io.github.nosequel.config.bukkit.BukkitConfigurationFile;
-import io.github.nosequel.queue.bukkit.config.adapter.QueueConfigTypeAdapter;
-import io.github.nosequel.queue.bukkit.config.adapter.ServerConfigTypeAdapter;
 import io.github.nosequel.queue.shared.QueueBootstrap;
+import io.github.nosequel.queue.shared.QueuePlatform;
+import io.github.nosequel.queue.shared.config.adapter.QueueConfigTypeAdapter;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
-import io.github.nosequel.queue.shared.model.server.ServerModel;
 import lombok.SneakyThrows;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.File;
 
 public class QueueConfiguration extends Configuration {
 
-    private final QueueHandler queueHandler = QueueBootstrap.getBootstrap().getPlatform().getQueueHandler();
+    private final QueueHandler queueHandler;
 
     @Configurable(path = "queues")
     public static QueueModel[] QUEUE_MODELS = new QueueModel[]{
@@ -25,13 +21,11 @@ public class QueueConfiguration extends Configuration {
     };
 
     @SneakyThrows
-    public QueueConfiguration(File file) {
-        super(new BukkitConfigurationFile(
-                file,
-                YamlConfiguration.loadConfiguration(file)
-        ));
+    public QueueConfiguration(ConfigurationFile file, QueuePlatform platform) {
+        super(file);
 
-        this.registerAdapter(QueueModel.class, new QueueConfigTypeAdapter());
+        this.queueHandler = platform.getQueueHandler();
+        this.registerAdapter(QueueModel.class, new QueueConfigTypeAdapter(platform.getServerHandler()));
         this.load();
     }
 

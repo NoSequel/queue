@@ -3,9 +3,10 @@ package io.github.nosequel.queue.bukkit.command;
 import io.github.nosequel.command.annotation.Command;
 import io.github.nosequel.command.annotation.Subcommand;
 import io.github.nosequel.command.bukkit.executor.BukkitCommandExecutor;
-import io.github.nosequel.queue.bukkit.config.LangConfiguration;
+import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.bukkit.util.ColorUtil;
 import io.github.nosequel.queue.shared.QueueBootstrap;
+import io.github.nosequel.queue.shared.config.command.QueueSubCommand;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
@@ -22,7 +23,7 @@ public class QueueMetaCommand {
     public void execute(BukkitCommandExecutor executor) {
         executor.sendMessage(ColorUtil.translate(LangConfiguration.QUEUE_HELP_MESSAGE_HEADER));
 
-        for (QueueSubcommand subcommand : LangConfiguration.QUEUE_SUB_COMMANDS) {
+        for (QueueSubCommand subcommand : LangConfiguration.QUEUE_SUB_COMMANDS) {
             executor.sendMessage(ColorUtil.translate(LangConfiguration.QUEUE_HELP_COMMAND_FORMAT
                     .replace("%sub_label%", subcommand.getSubcommandName())
                     .replace("%sub_arguments%", subcommand.getArguments())
@@ -67,14 +68,4 @@ public class QueueMetaCommand {
                 .replace("%queue_name%", queueModel.getIdentifier())
         );
     }
-
-    @Getter
-    @RequiredArgsConstructor
-    public static class QueueSubcommand {
-        private final String subcommandName;
-        private final String arguments;
-
-        private final String description;
-    }
-
 }

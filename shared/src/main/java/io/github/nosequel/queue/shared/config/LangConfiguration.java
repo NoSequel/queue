@@ -1,18 +1,19 @@
-package io.github.nosequel.queue.bukkit.config;
+package io.github.nosequel.queue.shared.config;
 
 import io.github.nosequel.config.Configuration;
+import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.config.annotation.Configurable;
-import io.github.nosequel.config.bukkit.BukkitConfigurationFile;
-import io.github.nosequel.queue.bukkit.command.QueueMetaCommand;
-import lombok.SneakyThrows;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
+import io.github.nosequel.queue.shared.config.command.QueueSubCommand;
+import lombok.SneakyThrows;
 
 public class LangConfiguration extends Configuration {
 
     @Configurable(path = "messages.queue.join")
     public static String QUEUE_JOIN = "&6You have joined the &f%queue_name% &6queue.";
+
+    @Configurable(path = "messages.queue.send")
+    public static String QUEUE_SEND = "&6Trying to send you to the &f%server_name% &6server.";
 
     @Configurable(path = "messages.queue.help.header")
     public static String QUEUE_HELP_MESSAGE_HEADER = "&6=== &eViewing usages of &6/queuemeta ===";
@@ -21,11 +22,11 @@ public class LangConfiguration extends Configuration {
     public static String QUEUE_HELP_COMMAND_FORMAT = "&equeuemeta %sub_label% &6%sub_arguments% - %description%";
 
     @Configurable(path = "messages.queue.help.sub_commands")
-    public static QueueMetaCommand.QueueSubcommand[] QUEUE_SUB_COMMANDS = new QueueMetaCommand.QueueSubcommand[]{
-            new QueueMetaCommand.QueueSubcommand("help", "", "Show the message you're viewing now."),
-            new QueueMetaCommand.QueueSubcommand("list", "", "Display all the registered queues."),
-            new QueueMetaCommand.QueueSubcommand("create", "<name>", "Create a new queue."),
-            new QueueMetaCommand.QueueSubcommand("setserver", "<queue> <server>", "Set the target server of a queue.")
+    public static QueueSubCommand[] QUEUE_SUB_COMMANDS = new QueueSubCommand[]{
+            new QueueSubCommand("help", "", "Show the message you're viewing now."),
+            new QueueSubCommand("list", "", "Display all the registered queues."),
+            new QueueSubCommand("create", "<name>", "Create a new queue."),
+            new QueueSubCommand("setserver", "<queue> <server>", "Set the target server of a queue.")
     };
 
     @Configurable(path = "messages.queue.created")
@@ -41,11 +42,8 @@ public class LangConfiguration extends Configuration {
     public static String QUEUE_UPDATE_SERVER = "&eYou have set &d%queue_name%&e's target server to &d%target_server%";
 
     @SneakyThrows
-    public LangConfiguration(File file) {
-        super(new BukkitConfigurationFile(
-                file,
-                YamlConfiguration.loadConfiguration(file)
-        ));
+    public LangConfiguration(ConfigurationFile file) {
+        super(file);
 
         this.load();
         this.save();

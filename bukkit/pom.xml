@@ -65,15 +65,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.NoSequel</groupId>
-            <artifactId>ConfigAPI</artifactId>
+            <groupId>com.github.NoSequel.ConfigAPI</groupId>
+            <artifactId>bukkit</artifactId>
             <version>394941def3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.NoSequel</groupId>
-            <artifactId>ScoreboardAPI</artifactId>
-            <version>d86c2c6d87</version>
         </dependency>
 
         <dependency>

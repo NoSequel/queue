@@ -1,5 +1,6 @@
 package io.github.nosequel.queue.shared.model.queue.update;
 
+import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.shared.model.player.QueuePlayerModel;
 import io.github.nosequel.queue.shared.model.player.QueuePlayerProvider;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
@@ -48,7 +49,10 @@ public class QueueMoveTask extends Thread {
                                     model.getIdentifier()
                             ));
 
-                            this.playerProvider.sendMessage(current, "&6Attempting to send you to the &f" + serverModel.getServerName() + " &6server.");
+                            this.playerProvider.sendMessage(current, LangConfiguration.QUEUE_SEND
+                                    .replace("%server_name%", serverModel.getServerName())
+                            );
+
                             this.playerProvider.sendToServer(current, serverModel);
                         }
                     }

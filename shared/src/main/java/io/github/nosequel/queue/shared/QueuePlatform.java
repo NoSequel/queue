@@ -1,15 +1,27 @@
 package io.github.nosequel.queue.shared;
 
+import io.github.nosequel.config.ConfigurationFile;
+import io.github.nosequel.queue.shared.config.LangConfiguration;
+import io.github.nosequel.queue.shared.config.QueueConfiguration;
+import io.github.nosequel.queue.shared.config.ServerConfiguration;
 import io.github.nosequel.queue.shared.model.player.QueuePlayerHandler;
+import io.github.nosequel.queue.shared.model.player.QueuePlayerProvider;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
+import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.queue.update.QueueUpdateSyncHandler;
 import io.github.nosequel.queue.shared.model.server.ServerHandler;
+import io.github.nosequel.queue.shared.model.server.ServerModel;
+import io.github.nosequel.queue.shared.model.server.ServerProvider;
 import io.github.nosequel.queue.shared.update.SyncHandler;
 import io.github.nosequel.queue.shared.update.player.QueuePlayerDataSyncHandler;
 import io.github.nosequel.queue.shared.update.server.ServerDataSyncHandler;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.io.File;
 
 @Getter
+@Setter
 public abstract class QueuePlatform {
 
     private final QueueHandler queueHandler;
@@ -17,22 +29,71 @@ public abstract class QueuePlatform {
     private final ServerHandler serverHandler;
     private final SyncHandler syncHandler;
 
+    private final QueueConfiguration queueModelConfig;
+    private final ServerConfiguration serverConfiguration;
+    private final LangConfiguration langConfiguration;
+
     /**
      * Constructor to make a new {@link QueuePlatform} object.
-     *
-     * @param queueHandler       the handler of the queues itself
-     * @param queuePlayerHandler the handler for player data
-     * @param serverHandler      the handler which handles server data
-     * @param syncHandler        the handler for synchronizing the data across networks
      */
-    public QueuePlatform(QueueHandler queueHandler, QueuePlayerHandler queuePlayerHandler, ServerHandler serverHandler, SyncHandler syncHandler) {
-        this.queueHandler = queueHandler;
-        this.queuePlayerHandler = queuePlayerHandler;
-        this.serverHandler = serverHandler;
-        this.syncHandler = syncHandler;
+    public QueuePlatform(ServerProvider serverProvider, QueuePlayerProvider playerProvider, File parentFolder) {
+        this.syncHandler = new SyncHandler();
 
+        this.queuePlayerHandler = new QueuePlayerHandler(this.syncHandler, playerProvider);
+        this.queueHandler = new QueueHandler(this.queuePlayerHandler);
+
+        // register server configuration before server handler,
+        // the server handler requires a field from the server configuration
+        this.serverConfiguration = new ServerConfiguration(this.createConfigurationFile(new File(parentFolder, "servers.yml")));
+
+        // register the previously mentioned server handler,
+        // using the ServerConfiguration.LOCAL_SERVER field.
+        this.serverHandler = new ServerHandler(ServerConfiguration.LOCAL_SERVER, this.syncHandler, serverProvider);
+
+        // register all synchronization handlers
         syncHandler.getSyncHandlers().add(new QueueUpdateSyncHandler(this.queueHandler, this.queuePlayerHandler));
         syncHandler.getSyncHandlers().add(new QueuePlayerDataSyncHandler(this.queuePlayerHandler));
         syncHandler.getSyncHandlers().add(new ServerDataSyncHandler(this.serverHandler));
+
+        // register configuration stuff
+        this.langConfiguration = new LangConfiguration(this.createConfigurationFile(new File(parentFolder, "lang.yml")));
+
+        // load server data before loading the queue configuration
+        this.loadServerData();
+
+        this.queueModelConfig = new QueueConfiguration(this.createConfigurationFile(new File(parentFolder, "queues.yml")), this);
+
+        // load the queue data after the queue configuration & server data
+        this.loadQueueData();
+    }
+
+    /**
+     * Create a new {@link ConfigurationFile} object with the
+     * provided {@link File} object.
+     *
+     * @param file the file to use to make the new configuration file
+     * @return the configuration file
+     */
+    public abstract ConfigurationFile createConfigurationFile(File file);
+
+    public void loadServerData() {
+        this.serverHandler.addModel(ServerConfiguration.LOCAL_SERVER);
+
+        for (ServerModel serverModel : ServerConfiguration.SERVER_MODELS) {
+            this.serverHandler.addModel(serverModel);
+        }
+    }
+
+    public void loadQueueData() {
+        for (QueueModel queueModel : QueueConfiguration.QUEUE_MODELS) {
+            this.queueHandler.addModel(queueModel);
+        }
+    }
+
+
+    public void unload() {
+        if(this.queueModelConfig != null) {
+            this.queueModelConfig.save();
+        }
     }
 }

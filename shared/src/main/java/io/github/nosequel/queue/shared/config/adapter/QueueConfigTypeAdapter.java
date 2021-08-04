@@ -1,14 +1,15 @@
-package io.github.nosequel.queue.bukkit.config.adapter;
+package io.github.nosequel.queue.shared.config.adapter;
 
 import com.google.gson.*;
 import io.github.nosequel.config.adapter.ConfigTypeAdapter;
-import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.server.ServerHandler;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class QueueConfigTypeAdapter implements ConfigTypeAdapter<QueueModel> {
 
-    private final ServerHandler serverHandler = QueueBootstrap.getBootstrap().getPlatform().getServerHandler();
+    private final ServerHandler serverHandler;
     private final JsonParser parser = new JsonParser();
 
     @Override

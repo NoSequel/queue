@@ -7,13 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class ServerHandler extends ModelCache<String, ServerModel> {
 
     private final ServerModel localServer;
     private final SyncHandler syncHandler;
 
-    private ServerProvider provider;
+    private final ServerProvider provider;
 
     /**
      * Constructor to make a new {@link ServerHandler} object
@@ -21,9 +20,10 @@ public class ServerHandler extends ModelCache<String, ServerModel> {
      * @param localServer the local server
      * @param syncHandler the handler for synchronization
      */
-    public ServerHandler(ServerModel localServer, SyncHandler syncHandler) {
+    public ServerHandler(ServerModel localServer, SyncHandler syncHandler, ServerProvider provider) {
         this.localServer = localServer;
         this.syncHandler = syncHandler;
+        this.provider = provider;
 
         new LocalServerUpdateTask(this, syncHandler).start();
     }
