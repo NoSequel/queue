@@ -1,7 +1,6 @@
 package io.github.nosequel.queue.bukkit;
 
 import io.github.nosequel.command.bukkit.BukkitCommandHandler;
-import io.github.nosequel.queue.bukkit.command.QueueJoinCommand;
 import io.github.nosequel.queue.bukkit.listener.PlayerListener;
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import lombok.SneakyThrows;
@@ -24,9 +23,6 @@ public class BukkitQueuePlugin extends JavaPlugin {
 
         // register listeners
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
-
-        // register commands
-        commandHandler.registerCommand(new QueueJoinCommand());
     }
 
     @Override

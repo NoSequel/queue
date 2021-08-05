@@ -2,7 +2,7 @@ package io.github.nosequel.queue.bukkit.listener;
 
 import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.model.player.PlayerHandler;
-import io.github.nosequel.queue.shared.model.player.PlayerModel;
+import io.github.nosequel.queue.shared.model.player.PlayerProvider;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,14 +15,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
+        final PlayerProvider provider = this.playerHandler.getPlayerProvider();
 
-        if (!this.playerHandler.find(player.getUniqueId()).isPresent()) {
-            final PlayerModel playerModel = new PlayerModel(
-                    player.getName(),
-                    player.getUniqueId()
-            );
-
-            this.playerHandler.addModel(playerModel);
-        }
+        provider.handleJoin(player.getUniqueId(), player.getName(), this.playerHandler);
     }
 }

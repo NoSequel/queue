@@ -2,6 +2,8 @@ package io.github.nosequel.queue.bukkit.providers;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import io.github.nosequel.command.bukkit.executor.BukkitCommandExecutor;
+import io.github.nosequel.command.executor.CommandExecutor;
 import io.github.nosequel.queue.bukkit.BukkitQueuePlugin;
 import io.github.nosequel.queue.bukkit.util.ColorUtil;
 import io.github.nosequel.queue.shared.model.player.PlayerModel;
@@ -11,8 +13,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class BukkitPlayerProvider implements PlayerProvider {
+
+    /**
+     * Get the {@link UUID} of a {@link CommandExecutor}.
+     *
+     * @param executor the executor to get the unique identifier of
+     * @return the unique identifier of the command executor, or null
+     */
+    @Override
+    public UUID getUniqueId(CommandExecutor executor) {
+        if (executor instanceof BukkitCommandExecutor && executor.isUser()) {
+            return ((BukkitCommandExecutor) executor).getPlayer().getUniqueId();
+        }
+
+        return null;
+    }
 
     /**
      * Send a message to a {@link PlayerModel}

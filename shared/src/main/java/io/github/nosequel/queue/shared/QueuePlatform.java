@@ -2,6 +2,7 @@ package io.github.nosequel.queue.shared;
 
 import io.github.nosequel.command.CommandHandler;
 import io.github.nosequel.config.ConfigurationFile;
+import io.github.nosequel.queue.shared.command.QueueJoinCommand;
 import io.github.nosequel.queue.shared.command.QueueMetaCommand;
 import io.github.nosequel.queue.shared.command.adapters.QueueModelTypeAdapter;
 import io.github.nosequel.queue.shared.command.adapters.ServerModelTypeAdapter;
@@ -89,6 +90,7 @@ public abstract class QueuePlatform {
         commandHandler.registerTypeAdapter(QueueModel.class, new QueueModelTypeAdapter(this.queueHandler));
 
         commandHandler.registerCommand(new QueueMetaCommand(this.queueHandler));
+        commandHandler.registerCommand(new QueueJoinCommand(this.playerHandler));
     }
 
     /**
