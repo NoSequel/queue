@@ -2,6 +2,7 @@ package io.github.nosequel.queue.shared.model.queue;
 
 import io.github.nosequel.queue.shared.model.Model;
 import io.github.nosequel.queue.shared.model.player.PlayerModel;
+import io.github.nosequel.queue.shared.model.queue.exception.AlreadyContainsModelException;
 import io.github.nosequel.queue.shared.model.queue.update.GenericQueueData;
 import io.github.nosequel.queue.shared.model.queue.update.QueueUpdateType;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
@@ -52,7 +53,11 @@ public class QueueModel implements Model<String> {
      *
      * @param playerModel the model to add to the queue
      */
-    public void addEntry(PlayerModel playerModel) {
+    public void addEntry(PlayerModel playerModel) throws AlreadyContainsModelException {
+        if(this.getEntries().contains(playerModel)) {
+            throw new AlreadyContainsModelException("Tried to add model with UUID " + playerModel.getUniqueId() + " to queue, but queue already contains this model.");
+        }
+
         this.entries.add(playerModel);
 
         SyncHandler.getInstance().pushData(new GenericQueueData(
@@ -69,6 +74,15 @@ public class QueueModel implements Model<String> {
      */
     public void addMetadata(QueueModelMetadata... metadatum) {
         this.metadatum.addAll(Arrays.asList(metadatum));
+    }
+
+    /**
+     * Remove an array of {@link QueueModelMetadata} from the {@link QueueModel#metadatum} field.
+     *
+     * @param metadatum the metadata to remove
+     */
+    public void removeMetadata(QueueModelMetadata... metadatum) {
+        Arrays.asList(metadatum).forEach(this.metadatum::remove);
     }
 
     /**

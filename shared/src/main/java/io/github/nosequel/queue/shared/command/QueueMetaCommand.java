@@ -3,11 +3,16 @@ package io.github.nosequel.queue.shared.command;
 import io.github.nosequel.command.annotation.Command;
 import io.github.nosequel.command.annotation.Subcommand;
 import io.github.nosequel.command.executor.CommandExecutor;
+import io.github.nosequel.queue.shared.command.metadata.QueueMetadataAction;
 import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.shared.config.command.QueueSubCommand;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
+import io.github.nosequel.queue.shared.model.queue.QueueModelMetadata;
+import io.github.nosequel.queue.shared.model.queue.update.GenericQueueData;
+import io.github.nosequel.queue.shared.model.queue.update.metadata.QueueMetadataData;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
+import io.github.nosequel.queue.shared.update.SyncHandler;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -64,5 +69,40 @@ public class QueueMetaCommand {
                 .replace("%target_server%", serverModel.getServerName())
                 .replace("%queue_name%", queueModel.getIdentifier())
         );
+    }
+
+    @Subcommand(label = "metadata", parentLabel = "queuemeta", permission = "queue.bukkit.meta.metadata", userOnly = false)
+    public void metadata(CommandExecutor executor, QueueModel model, QueueMetadataAction action, QueueModelMetadata metadata) {
+        final String string;
+
+        switch (action) {
+            case ADD: {
+                model.addMetadata(metadata);
+                string = LangConfiguration.QUEUE_ADD_METADATA;
+            }
+            break;
+
+            case REMOVE: {
+                model.removeMetadata(metadata);
+                string = LangConfiguration.QUEUE_REMOVE_METADATA;
+            }
+            break;
+
+            default: {
+                string = "Invalid action";
+            }
+        }
+
+        executor.sendMessage(string
+                .replace("%queue_name%", model.getIdentifier())
+                .replace("%metadata%", metadata.name())
+        );
+
+        // synchronize the new update through redis
+        SyncHandler.getInstance().pushData(new QueueMetadataData(
+                metadata,
+                action,
+                model.getIdentifier()
+        ));
     }
 }

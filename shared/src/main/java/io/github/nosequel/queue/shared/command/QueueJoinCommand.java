@@ -6,6 +6,7 @@ import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.shared.model.player.PlayerHandler;
 import io.github.nosequel.queue.shared.model.player.PlayerModel;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
+import io.github.nosequel.queue.shared.model.queue.exception.AlreadyContainsModelException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -20,6 +21,12 @@ public class QueueJoinCommand {
                 .orElse(null);
 
         executor.sendMessage(LangConfiguration.QUEUE_JOIN.replace("%queue_name%", target.getIdentifier()));
-        target.addEntry(model);
+
+        try {
+            target.addEntry(model);
+            executor.sendMessage(LangConfiguration.QUEUE_JOIN.replace("%queue_name%", target.getIdentifier()));
+        } catch (AlreadyContainsModelException ignored) {
+            executor.sendMessage(LangConfiguration.ALREADY_IN_QUEUE.replace("%queue_name%", target.getIdentifier()));
+        }
     }
 }

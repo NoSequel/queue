@@ -9,8 +9,17 @@ import lombok.SneakyThrows;
 
 public class LangConfiguration extends Configuration {
 
+    @Configurable(path = "messages.queue.already_in_this_queue")
+    public static final String ALREADY_IN_QUEUE = "&cYou are already queueing for this server.";
+
     @Configurable(path = "messages.queue.join")
     public static String QUEUE_JOIN = "&6You have joined the &f%queue_name% &6queue.";
+
+    @Configurable(path = "messages.queue.metadata.added")
+    public static String QUEUE_ADD_METADATA = "&6You have &aadded &6the &f%metadata% &6metadata to the &f%queue_name% &6queue.";
+
+    @Configurable(path = "messages.queue.metadata.REMOVED")
+    public static String QUEUE_REMOVE_METADATA = "&6You have &cremoved &6the &f%metadata% &6metadata to the &f%queue_name% &6queue.";
 
     @Configurable(path = "messages.queue.send")
     public static String QUEUE_SEND = "&6Trying to send you to the &f%server_name% &6server.";

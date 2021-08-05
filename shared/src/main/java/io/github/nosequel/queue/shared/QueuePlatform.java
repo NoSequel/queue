@@ -4,8 +4,11 @@ import io.github.nosequel.command.CommandHandler;
 import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.queue.shared.command.QueueJoinCommand;
 import io.github.nosequel.queue.shared.command.QueueMetaCommand;
+import io.github.nosequel.queue.shared.command.adapters.QueueMetadataActionTypeAdapter;
+import io.github.nosequel.queue.shared.command.adapters.QueueModelMetadataTypeAdapter;
 import io.github.nosequel.queue.shared.command.adapters.QueueModelTypeAdapter;
 import io.github.nosequel.queue.shared.command.adapters.ServerModelTypeAdapter;
+import io.github.nosequel.queue.shared.command.metadata.QueueMetadataAction;
 import io.github.nosequel.queue.shared.config.DatabaseConfiguration;
 import io.github.nosequel.queue.shared.config.LangConfiguration;
 import io.github.nosequel.queue.shared.config.QueueConfiguration;
@@ -14,7 +17,9 @@ import io.github.nosequel.queue.shared.model.player.PlayerHandler;
 import io.github.nosequel.queue.shared.model.player.PlayerProvider;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
+import io.github.nosequel.queue.shared.model.queue.QueueModelMetadata;
 import io.github.nosequel.queue.shared.model.queue.update.QueueUpdateSyncHandler;
+import io.github.nosequel.queue.shared.model.queue.update.metadata.QueueMetadataDataSyncHandler;
 import io.github.nosequel.queue.shared.model.server.ServerHandler;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
 import io.github.nosequel.queue.shared.model.server.ServerProvider;
@@ -73,6 +78,7 @@ public abstract class QueuePlatform {
         syncHandler.getSyncHandlers().add(new QueueUpdateSyncHandler(this.queueHandler, this.playerHandler));
         syncHandler.getSyncHandlers().add(new QueuePlayerDataSyncHandler(this.playerHandler));
         syncHandler.getSyncHandlers().add(new ServerDataSyncHandler(this.serverHandler));
+        syncHandler.getSyncHandlers().add(new QueueMetadataDataSyncHandler(this.queueHandler));
 
         // register configuration stuff
         this.langConfiguration = new LangConfiguration(this.createConfigurationFile(new File(parentFolder, "lang.yml")));
@@ -88,6 +94,8 @@ public abstract class QueuePlatform {
         // register commands
         commandHandler.registerTypeAdapter(ServerModel.class, new ServerModelTypeAdapter(this.serverHandler));
         commandHandler.registerTypeAdapter(QueueModel.class, new QueueModelTypeAdapter(this.queueHandler));
+        commandHandler.registerTypeAdapter(QueueMetadataAction.class, new QueueMetadataActionTypeAdapter());
+        commandHandler.registerTypeAdapter(QueueModelMetadata.class, new QueueModelMetadataTypeAdapter());
 
         commandHandler.registerCommand(new QueueMetaCommand(this.queueHandler));
         commandHandler.registerCommand(new QueueJoinCommand(this.playerHandler));
