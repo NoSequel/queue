@@ -6,6 +6,7 @@ A simplistic queue system, written in Java, primarily for Bukkit.
 * Very easy to make new implementations, most code is shared between all implementations.
 * Able to join multiple queues at the same time, position synchronized across network instances.
 * Very extensible structure easily allowing for new features.
+* Easy Priority provider handling to easily set the provider it uses to handle the player's queue position within the queue.
 
 ## Configuration
 The plugin is completely configurable, including queues, servers and most (if not all) messages.
