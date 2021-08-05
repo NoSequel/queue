@@ -60,4 +60,16 @@ public class BukkitPlayerProvider implements PlayerProvider {
 
         player.sendPluginMessage(BukkitQueuePlugin.getPlugin(BukkitQueuePlugin.class), "BungeeCord", out.toByteArray());
     }
+
+    /**
+     * Check if a {@link PlayerModel} has a provided permission
+     *
+     * @param playerModel the player model to check the permission for
+     * @param permission  the permission to check for
+     * @return whether the player model has the permission or not
+     */
+    @Override
+    public boolean hasPermission(PlayerModel playerModel, String permission) {
+        return Bukkit.getPlayer(playerModel.getUniqueId()).hasPermission(permission);
+    }
 }

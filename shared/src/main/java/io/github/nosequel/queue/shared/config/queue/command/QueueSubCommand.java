@@ -1,4 +1,4 @@
-package io.github.nosequel.queue.shared.config.command;
+package io.github.nosequel.queue.shared.config.queue.command;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

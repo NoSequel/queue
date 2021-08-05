@@ -9,12 +9,12 @@ import io.github.nosequel.queue.shared.command.adapters.QueueModelMetadataTypeAd
 import io.github.nosequel.queue.shared.command.adapters.QueueModelTypeAdapter;
 import io.github.nosequel.queue.shared.command.adapters.ServerModelTypeAdapter;
 import io.github.nosequel.queue.shared.command.metadata.QueueMetadataAction;
-import io.github.nosequel.queue.shared.config.DatabaseConfiguration;
-import io.github.nosequel.queue.shared.config.LangConfiguration;
-import io.github.nosequel.queue.shared.config.QueueConfiguration;
-import io.github.nosequel.queue.shared.config.ServerConfiguration;
+import io.github.nosequel.queue.shared.config.*;
+import io.github.nosequel.queue.shared.config.priority.PriorityConfiguration;
+import io.github.nosequel.queue.shared.config.queue.QueueConfiguration;
 import io.github.nosequel.queue.shared.model.player.PlayerHandler;
 import io.github.nosequel.queue.shared.model.player.PlayerProvider;
+import io.github.nosequel.queue.shared.model.priority.PriorityProviderHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.queue.QueueModelMetadata;
@@ -36,6 +36,7 @@ import java.io.File;
 @Setter
 public abstract class QueuePlatform {
 
+    private final PriorityProviderHandler priorityProviderHandler;
     private final QueueHandler queueHandler;
     private final PlayerHandler playerHandler;
     private final ServerHandler serverHandler;
@@ -45,6 +46,8 @@ public abstract class QueuePlatform {
     private final ServerConfiguration serverConfiguration;
     private final LangConfiguration langConfiguration;
     private final DatabaseConfiguration databaseConfiguration;
+
+    private final PriorityConfiguration priorityConfiguration;
 
     /**
      * Constructor to make a new {@link QueuePlatform} object.
@@ -58,6 +61,7 @@ public abstract class QueuePlatform {
 
         this.playerHandler = new PlayerHandler(this.syncHandler, playerProvider);
         this.queueHandler = new QueueHandler(this.playerHandler);
+        this.priorityProviderHandler = new PriorityProviderHandler();
 
         // register server configuration before server handler,
         // the server handler requires a field from the server configuration
@@ -87,6 +91,10 @@ public abstract class QueuePlatform {
         this.loadServerData();
 
         this.queueModelConfig = new QueueConfiguration(this.createConfigurationFile(new File(parentFolder, "queues.yml")), this);
+
+        // setup the priorities
+        this.priorityConfiguration = new PriorityConfiguration(this.createConfigurationFile(new File(parentFolder, "priorities.yml")));
+        this.priorityProviderHandler.setProvider(PriorityConfiguration.PROVIDER);
 
         // load the queue data after the queue configuration & server data
         this.loadQueueData();

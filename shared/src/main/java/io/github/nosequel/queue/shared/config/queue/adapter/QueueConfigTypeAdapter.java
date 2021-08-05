@@ -1,4 +1,4 @@
-package io.github.nosequel.queue.shared.config.adapter;
+package io.github.nosequel.queue.shared.config.queue.adapter;
 
 import com.google.gson.*;
 import io.github.nosequel.config.adapter.ConfigTypeAdapter;

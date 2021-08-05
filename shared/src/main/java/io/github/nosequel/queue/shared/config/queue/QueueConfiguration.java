@@ -1,11 +1,10 @@
-package io.github.nosequel.queue.shared.config;
+package io.github.nosequel.queue.shared.config.queue;
 
 import io.github.nosequel.config.Configuration;
 import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.config.annotation.Configurable;
-import io.github.nosequel.queue.shared.QueueBootstrap;
 import io.github.nosequel.queue.shared.QueuePlatform;
-import io.github.nosequel.queue.shared.config.adapter.QueueConfigTypeAdapter;
+import io.github.nosequel.queue.shared.config.queue.adapter.QueueConfigTypeAdapter;
 import io.github.nosequel.queue.shared.model.queue.QueueHandler;
 import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import lombok.SneakyThrows;

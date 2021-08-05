@@ -4,13 +4,13 @@ import io.github.nosequel.config.Configuration;
 import io.github.nosequel.config.ConfigurationFile;
 import io.github.nosequel.config.annotation.Configurable;
 
-import io.github.nosequel.queue.shared.config.command.QueueSubCommand;
+import io.github.nosequel.queue.shared.config.queue.command.QueueSubCommand;
 import lombok.SneakyThrows;
 
 public class LangConfiguration extends Configuration {
 
     @Configurable(path = "messages.queue.already_in_this_queue")
-    public static final String ALREADY_IN_QUEUE = "&cYou are already queueing for this server.";
+    public static String ALREADY_IN_QUEUE = "&cYou are already queueing for this server.";
 
     @Configurable(path = "messages.queue.join")
     public static String QUEUE_JOIN = "&6You have joined the &f%queue_name% &6queue.";
@@ -35,7 +35,8 @@ public class LangConfiguration extends Configuration {
             new QueueSubCommand("help", "", "Show the message you're viewing now."),
             new QueueSubCommand("list", "", "Display all the registered queues."),
             new QueueSubCommand("create", "<name>", "Create a new queue."),
-            new QueueSubCommand("setserver", "<queue> <server>", "Set the target server of a queue.")
+            new QueueSubCommand("setserver", "<queue> <server>", "Set the target server of a queue."),
+            new QueueSubCommand("metadata", "<queue> <add|remove> <metadata>", "Add or remove a provided metadata from a queue.")
     };
 
     @Configurable(path = "messages.queue.created")

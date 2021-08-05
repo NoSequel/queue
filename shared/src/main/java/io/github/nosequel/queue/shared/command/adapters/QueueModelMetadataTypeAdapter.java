@@ -2,7 +2,6 @@ package io.github.nosequel.queue.shared.command.adapters;
 
 import io.github.nosequel.command.adapter.TypeAdapter;
 import io.github.nosequel.command.executor.CommandExecutor;
-import io.github.nosequel.queue.shared.model.queue.QueueModel;
 import io.github.nosequel.queue.shared.model.queue.QueueModelMetadata;
 
 import java.util.Arrays;

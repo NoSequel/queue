@@ -20,8 +20,6 @@ public class QueueJoinCommand {
                 .find(this.playerHandler.getPlayerProvider().getUniqueId(executor))
                 .orElse(null);
 
-        executor.sendMessage(LangConfiguration.QUEUE_JOIN.replace("%queue_name%", target.getIdentifier()));
-
         try {
             target.addEntry(model);
             executor.sendMessage(LangConfiguration.QUEUE_JOIN.replace("%queue_name%", target.getIdentifier()));
