@@ -8,6 +8,6 @@ public class QueueMetadataActionTypeAdapter implements TypeAdapter<QueueMetadata
 
     @Override
     public QueueMetadataAction convert(CommandExecutor commandExecutor, String s) throws Exception {
-        return QueueMetadataAction.valueOf(s);
+        return QueueMetadataAction.valueOf(s.toUpperCase());
     }
 }
