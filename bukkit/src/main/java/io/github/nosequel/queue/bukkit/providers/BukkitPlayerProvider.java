@@ -5,11 +5,11 @@ import com.google.common.io.ByteStreams;
 import io.github.nosequel.command.bukkit.executor.BukkitCommandExecutor;
 import io.github.nosequel.command.executor.CommandExecutor;
 import io.github.nosequel.queue.bukkit.BukkitQueuePlugin;
-import io.github.nosequel.queue.bukkit.util.ColorUtil;
 import io.github.nosequel.queue.shared.model.player.PlayerModel;
 import io.github.nosequel.queue.shared.model.player.PlayerProvider;
 import io.github.nosequel.queue.shared.model.server.ServerModel;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -40,7 +40,7 @@ public class BukkitPlayerProvider implements PlayerProvider {
      */
     @Override
     public void sendMessage(PlayerModel model, String message) {
-        Optional.ofNullable(Bukkit.getPlayer(model.getUniqueId())).ifPresent(player -> player.sendMessage(ColorUtil.translate(message)));
+        Optional.ofNullable(Bukkit.getPlayer(model.getUniqueId())).ifPresent(player -> player.sendMessage(ChatColor.translateAlternateColorCodes('&', message)));
     }
 
     /**
