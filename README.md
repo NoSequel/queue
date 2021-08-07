@@ -1,3 +1,5 @@
+# !!! This is currently being recoded on the https://github.com/NoSequel/queue-recode repository !!!
+
 # Queue
 A simplistic queue system, written in Java, primarily for Bukkit.
 
